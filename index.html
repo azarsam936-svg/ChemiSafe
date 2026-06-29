@@ -8,219 +8,443 @@
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
+        /* ============ RESET ============ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* ============ BASE ============ */
         body {
-            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0d1117;
-            color: #e6edf3;
+            font-family: 'Vazirmatn', sans-serif;
+            background: #f0f2f7;
+            color: #2d3142;
             line-height: 1.8;
             padding: 20px;
             min-height: 100vh;
         }
 
+     
+        /* ============ TYPEWRITER LOADER ============ */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            background: #f0f2f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        #page-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #loader-text {
+            font-size: 15px;
+            color: #7c83a0;
+            font-weight: 500;
+        }
+
+        .typewriter {
+            --blue: #5C86FF;
+            --blue-dark: #275EFE;
+            --key: #fff;
+            --paper: #EEF0FD;
+            --text: #D3D4EC;
+            --tool: #FBC56C;
+            --duration: 3s;
+            position: relative;
+            animation: bounce05 var(--duration) linear infinite;
+        }
+        .typewriter .slide {
+            width: 92px;
+            height: 20px;
+            border-radius: 3px;
+            margin-left: 14px;
+            transform: translateX(14px);
+            background: linear-gradient(var(--blue), var(--blue-dark));
+            animation: slide05 var(--duration) ease infinite;
+        }
+        .typewriter .slide:before,
+        .typewriter .slide:after,
+        .typewriter .slide i:before {
+            content: "";
+            position: absolute;
+            background: var(--tool);
+        }
+        .typewriter .slide:before {
+            width: 2px;
+            height: 8px;
+            top: 6px;
+            left: 100%;
+        }
+        .typewriter .slide:after {
+            left: 94px;
+            top: 3px;
+            height: 14px;
+            width: 6px;
+            border-radius: 3px;
+        }
+        .typewriter .slide i {
+            display: block;
+            position: absolute;
+            right: 100%;
+            width: 6px;
+            height: 4px;
+            top: 4px;
+            background: var(--tool);
+        }
+        .typewriter .slide i:before {
+            right: 100%;
+            top: -2px;
+            width: 4px;
+            border-radius: 2px;
+            height: 14px;
+        }
+        .typewriter .paper {
+            position: absolute;
+            left: 24px;
+            top: -26px;
+            width: 40px;
+            height: 46px;
+            border-radius: 5px;
+            background: var(--paper);
+            transform: translateY(46px);
+            animation: paper05 var(--duration) linear infinite;
+        }
+        .typewriter .paper:before {
+            content: "";
+            position: absolute;
+            left: 6px;
+            right: 6px;
+            top: 7px;
+            border-radius: 2px;
+            height: 4px;
+            transform: scaleY(0.8);
+            background: var(--text);
+            box-shadow: 0 12px 0 var(--text), 0 24px 0 var(--text), 0 36px 0 var(--text);
+        }
+        .typewriter .keyboard {
+            width: 120px;
+            height: 56px;
+            margin-top: -10px;
+            z-index: 1;
+            position: relative;
+        }
+        .typewriter .keyboard:before,
+        .typewriter .keyboard:after {
+            content: "";
+            position: absolute;
+        }
+        .typewriter .keyboard:before {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 7px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            transform: perspective(10px) rotateX(2deg);
+            transform-origin: 50% 100%;
+        }
+        .typewriter .keyboard:after {
+            left: 2px;
+            top: 25px;
+            width: 11px;
+            height: 4px;
+            border-radius: 2px;
+            box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+            animation: keyboard05 var(--duration) linear infinite;
+        }
+        @keyframes bounce05 {
+            85%,
+            92%,
+            100% {
+                transform: translateY(0)
+            }
+            89% {
+                transform: translateY(-4px)
+            }
+            95% {
+                transform: translateY(2px)
+            }
+        }
+        @keyframes slide05 {
+            5% {
+                transform: translateX(14px)
+            }
+            15%,
+            30% {
+                transform: translateX(6px)
+            }
+            40%,
+            55% {
+                transform: translateX(0)
+            }
+            65%,
+            70% {
+                transform: translateX(-4px)
+            }
+            80%,
+            89% {
+                transform: translateX(-12px)
+            }
+            100% {
+                transform: translateX(14px)
+            }
+        }
+        @keyframes paper05 {
+            5% {
+                transform: translateY(46px)
+            }
+            20%,
+            30% {
+                transform: translateY(34px)
+            }
+            40%,
+            55% {
+                transform: translateY(22px)
+            }
+            65%,
+            70% {
+                transform: translateY(10px)
+            }
+            80%,
+            85% {
+                transform: translateY(0)
+            }
+            92%,
+            100% {
+                transform: translateY(46px)
+            }
+        }
+        @keyframes keyboard05 {
+            5%,
+            12%,
+            21%,
+            30%,
+            39%,
+            48%,
+            57%,
+            66%,
+            75%,
+            84% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            9% {
+                box-shadow: 15px 2px 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            18% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 2px 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            27% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 12px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            36% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 12px 0 var(--key), 60px 12px 0 var(--key), 68px 12px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            45% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 2px 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            54% {
+                box-shadow: 15px 0 0 var(--key), 30px 2px 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            63% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 12px 0 var(--key)
+            }
+            72% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 2px 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+            81% {
+                box-shadow: 15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key), 60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key), 22px 10px 0 var(--key), 37px 12px 0 var(--key), 52px 10px 0 var(--key), 60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key)
+            }
+        }
+
+        /* ============ LAYOUT ============ */
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: linear-gradient(145deg, #161b22, #1c2330);
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6);
+            background: #ffffff;
+            box-shadow: 20px 20px 60px #c5c5c5, -20px -20px 60px #ffffff;
             border-radius: 32px;
             padding: 30px 35px;
-            border: 1px solid #30363d;
             position: relative;
             overflow: hidden;
         }
         .container::before {
             content: '';
             position: absolute;
-            top: -150px;
-            right: -150px;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(47,129,247,0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .container::after {
-            content: '';
-            position: absolute;
-            bottom: -100px;
-            left: -100px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(88,166,255,0.04) 0%, transparent 70%);
+            top: -120px;
+            right: -120px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(92, 134, 255, 0.07) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
 
+        /* ============ HEADER ============ */
         .header {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #30363d;
-            padding-bottom: 20px;
+            border-bottom: 2px solid #e8eaf0;
+            padding-bottom: 22px;
             margin-bottom: 22px;
+            gap: 16px;
             position: relative;
             z-index: 1;
         }
-
         .logo h1 {
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 900;
-            color: #e6edf3;
+            color: #2d3142;
             letter-spacing: -0.5px;
-        }
-        .logo h1 i {
-            color: #58a6ff;
-            margin-left: 12px;
-            background: rgba(88,166,255,0.1);
-            padding: 8px;
-            border-radius: 14px;
-            font-size: 26px;
-        }
-        .logo span {
-            display: block;
-            font-size: 14px;
-            font-weight: 400;
-            color: #8b949e;
-            margin-top: 4px;
-            padding-right: 10px;
-            border-right: 3px solid #58a6ff;
-            padding-right: 14px;
-        }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-            max-width: 520px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 16px 24px 16px 56px;
-            border: 1.5px solid #30363d;
-            border-radius: 60px;
-            font-size: 17px;
-            background: #21262d;
-            color: #e6edf3;
-            transition: all 0.3s ease;
-            outline: none;
-            font-family: 'Vazirmatn', sans-serif;
-        }
-        .search-box input::placeholder {
-            color: #6e7681;
-            font-size: 15px;
-        }
-        .search-box input:focus {
-            border-color: #58a6ff;
-            background: #161b22;
-            box-shadow: 0 0 0 4px rgba(47,129,247,0.12);
-        }
-        .search-box i {
-            position: absolute;
-            right: 24px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6e7681;
-            font-size: 20px;
-            transition: 0.3s;
-        }
-        .search-box input:focus+i,
-        .search-box input:focus~i {
-            color: #58a6ff;
-        }
-
-        .stats-bar {
-<div class="stats-bar" id="statsBar" style="display: none !important;">
-    <div class="stat-item"><i class="fas fa-flask"></i> <strong id="totalCount"></strong></div>
-</div>
-        }
-        .stats-bar .stat-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 14px;
-            color: #8b949e;
         }
-        .stats-bar .stat-item i {
-            color: #58a6ff;
-            font-size: 18px;
+        .logo h1 .logo-icon {
+            color: #5C86FF;
+            background: rgba(92, 134, 255, 0.1);
+            padding: 8px 10px;
+            border-radius: 14px;
+            font-size: 22px;
         }
-        .stats-bar .stat-item strong {
-            color: #e6edf3;
-            font-size: 16px;
+        .logo span {
+            display: block;
+            font-size: 13px;
+            font-weight: 400;
+            color: #7c83a0;
+            margin-top: 5px;
+            padding-right: 12px;
+            border-right: 3px solid #5C86FF;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ============ SEARCH BOX ============ */
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 14px 52px 14px 24px;
+            border: none;
+            border-radius: 60px;
+            font-size: 16px;
+            background: #e8e8e8;
+            color: #2d3142;
+            transition: 0.3s;
+            outline: none;
+            font-family: 'Vazirmatn', sans-serif;
+            box-shadow: 20px 20px 60px #c5c5c5, -20px -20px 60px #ffffff;
+        }
+        .search-box input::placeholder {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        .search-box input:focus {
+            outline-color: #e8e8e8;
+            background: #e8e8e8;
+            box-shadow: inset 20px 20px 60px #c5c5c5, inset -20px -20px 60px #ffffff;
+        }
+        .search-box i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .search-box input:focus~i {
+            color: #5C86FF;
+        }
+
+        /* ============ FILTER CHIPS ============ */
         .filter-section {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px 14px;
+            gap: 8px 12px;
             margin-bottom: 28px;
             align-items: center;
-            border-bottom: 1px solid #30363d;
+            border-bottom: 1px solid #e8eaf0;
             padding-bottom: 18px;
             position: relative;
             z-index: 1;
         }
         .filter-label {
             font-weight: 700;
-            color: #8b949e;
-            font-size: 14px;
-            letter-spacing: 0.5px;
+            color: #9ca3af;
+            font-size: 13px;
         }
         .filter-chip {
-            background: #21262d;
-            padding: 6px 20px;
+            background: #e8e8e8;
+            padding: 6px 18px;
             border-radius: 40px;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: #8b949e;
+            transition: all 0.2s;
+            color: #7c83a0;
             border: 1.5px solid transparent;
             user-select: none;
+            box-shadow: 4px 4px 10px #d1d1d1, -4px -4px 10px #ffffff;
         }
         .filter-chip:hover {
-            background: #30363d;
-            color: #e6edf3;
+            color: #2d3142;
             transform: translateY(-1px);
+            box-shadow: 6px 6px 14px #d1d1d1, -6px -6px 14px #ffffff;
         }
         .filter-chip.active {
-            background: rgba(47,129,247,0.15);
-            color: #58a6ff;
-            border-color: #58a6ff;
-            box-shadow: 0 0 20px rgba(47,129,247,0.08);
+            background: #e8eeff;
+            color: #5C86FF;
+            border-color: #5C86FF;
+            box-shadow: inset 4px 4px 10px #cdd4ff, inset -4px -4px 10px #ffffff;
         }
         .filter-chip i {
-            margin-left: 8px;
-            font-size: 13px;
+            margin-left: 6px;
+            font-size: 12px;
         }
 
+        /* ============ CARDS ============ */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 28px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
             margin-top: 10px;
             position: relative;
             z-index: 1;
         }
 
+        /* ============ GLASS CARD WITH SHINE EFFECT ============ */
         .card {
-            background: linear-gradient(145deg, #1c2330, #161b22);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10.5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 24px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-            border: 1px solid #30363d;
+            padding: 0;
+            box-shadow: 8px 8px 24px #d1d3da, -8px -8px 24px #ffffff;
             overflow: hidden;
             transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             cursor: pointer;
             position: relative;
+            z-index: 0;
         }
+
         .card::before {
             content: '';
             position: absolute;
@@ -228,124 +452,155 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #58a6ff, #a371f7);
+            background: linear-gradient(90deg, #5C86FF, #a371f7);
             opacity: 0;
             transition: 0.3s;
+            z-index: 2;
         }
         .card:hover::before {
             opacity: 1;
         }
+
+        /* Shine effect */
+        .card::after {
+            z-index: -1;
+            content: " ";
+            position: absolute;
+            width: 150%;
+            top: 0;
+            left: 0;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            transform: rotateZ(50deg);
+            filter: blur(30px);
+            animation: shine 10s ease infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% {
+                top: 100%;
+                left: -100%;
+            }
+            50%,
+            100% {
+                top: 0%;
+                left: 70%;
+            }
+        }
+
         .card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-            border-color: #3d4450;
+            box-shadow: 12px 12px 32px #c5c7cf, -8px -8px 20px #ffffff;
+            border-color: rgba(92, 134, 255, 0.2);
         }
 
         .card-header {
-            padding: 18px 22px 14px 22px;
-            border-bottom: 1px solid #30363d;
-            background: rgba(33, 38, 45, 0.5);
+            padding: 18px 22px 14px;
+            border-bottom: 1px solid #e4e6ed;
+            background: rgba(255, 255, 255, 0.6);
         }
         .card-header h3 {
-            font-size: 20px;
-            color: #e6edf3;
+            font-size: 18px;
+            color: #2d3142;
             display: flex;
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
         }
         .card-header h3 i {
-            color: #58a6ff;
-            font-size: 22px;
-            width: 32px;
+            color: #5C86FF;
+            font-size: 20px;
+            width: 28px;
             text-align: center;
         }
         .badge {
-            background: #30363d;
-            color: #8b949e;
-            font-size: 11px;
+            background: rgba(92, 134, 255, 0.1);
+            color: #5C86FF;
+            font-size: 10px;
             font-weight: 700;
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 40px;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             white-space: nowrap;
-            border: 1px solid #3d4450;
+            border: 1px solid rgba(92, 134, 255, 0.2);
         }
 
         .card-body {
-            padding: 20px 22px 22px 22px;
+            padding: 18px 22px 20px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
         .principle {
-            font-size: 14px;
-            color: #c9d1d9;
-            background: #21262d;
-            padding: 12px 16px;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            border-right: 4px solid #58a6ff;
+            font-size: 13px;
+            color: #4b5280;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-right: 3px solid #5C86FF;
             line-height: 1.7;
+            box-shadow: inset 2px 2px 6px #dddee4, inset -2px -2px 6px #ffffff;
         }
         .principle strong {
-            color: #e6edf3;
+            color: #2d3142;
         }
         .purpose {
-            background: #1c2330;
-            padding: 10px 16px;
-            border-radius: 14px;
-            font-size: 14px;
-            color: #d4a548;
-            margin-bottom: 12px;
-            border-right: 4px solid #d29922;
+            background: rgba(255, 248, 230, 0.8);
+            padding: 9px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #92681a;
+            margin-bottom: 10px;
+            border-right: 3px solid #f0b429;
+            box-shadow: inset 2px 2px 6px #e8e2d0, inset -2px -2px 6px #fffff0;
         }
         .purpose strong {
-            color: #e6edf3;
+            color: #5c4008;
         }
         .purpose i {
-            color: #d29922;
-            margin-left: 8px;
+            color: #f0b429;
+            margin-left: 6px;
         }
 
         .meta-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px 18px;
-            font-size: 13px;
-            color: #8b949e;
-            margin: 4px 0 8px 0;
+            gap: 6px 16px;
+            font-size: 12px;
+            color: #7c83a0;
+            margin: 4px 0 8px;
         }
         .meta-list i {
-            width: 20px;
-            color: #58a6ff;
+            color: #5C86FF;
             margin-left: 4px;
+            width: 16px;
         }
         .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px 10px;
-            margin: 10px 0 14px 0;
+            gap: 5px 8px;
+            margin: 8px 0 12px;
         }
         .tag {
-            background: #21262d;
-            padding: 2px 14px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 12px;
             border-radius: 30px;
             font-size: 11px;
-            color: #8b949e;
-            border: 1px solid #30363d;
+            color: #7c83a0;
+            border: 1px solid #e4e6ed;
             font-weight: 500;
         }
-
         .protocol-preview {
-            background: #161b22;
-            border: 1px dashed #30363d;
-            border-radius: 14px;
-            padding: 14px 16px;
-            font-size: 13px;
-            color: #c9d1d9;
-            margin: 4px 0 12px 0;
-            max-height: 100px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px dashed #d1d3da;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 12px;
+            color: #4b5280;
+            margin: 0 0 10px;
+            max-height: 90px;
             overflow: hidden;
             position: relative;
             line-height: 1.6;
@@ -357,27 +612,28 @@
             left: 0;
             right: 0;
             text-align: left;
-            padding: 20px 16px 6px 16px;
-            background: linear-gradient(to top, #161b22, transparent);
-            color: #58a6ff;
+            padding: 18px 14px 5px;
+            background: linear-gradient(to top, rgba(240, 242, 247, 0.95), transparent);
+            color: #5C86FF;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .card-footer {
-            padding: 12px 22px 18px 22px;
-            border-top: 1px solid #30363d;
+            padding: 12px 22px 16px;
+            border-top: 1px solid #e4e6ed;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            background: rgba(22, 27, 34, 0.6);
-            border-radius: 0 0 24px 24px;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.4);
         }
+
+        /* ============ BUTTONS ============ */
         .btn {
             border: none;
-            padding: 8px 22px;
+            padding: 8px 20px;
             border-radius: 40px;
             font-weight: 600;
             font-size: 13px;
@@ -385,146 +641,208 @@
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
             text-decoration: none;
-            background: #21262d;
-            color: #8b949e;
             font-family: 'Vazirmatn', sans-serif;
-            border: 1px solid transparent;
-        }
-        .btn:hover {
-            background: #30363d;
-            color: #e6edf3;
-            transform: translateY(-1px);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #1f6feb, #2f81f7);
-            color: white;
-            box-shadow: 0 4px 16px rgba(47, 129, 247, 0.2);
-        }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2f81f7, #58a6ff);
-            color: white;
-            box-shadow: 0 6px 24px rgba(47, 129, 247, 0.3);
-            transform: translateY(-2px);
-        }
-        .btn-primary i {
-            color: white;
-        }
-        .btn-sm {
-            padding: 6px 16px;
-            font-size: 12px;
         }
         .btn-outline {
-            background: transparent;
-            border: 1px solid #30363d;
+            background: #e8e8e8;
+            color: #7c83a0;
+            box-shadow: 5px 5px 12px #d1d1d1, -5px -5px 12px #ffffff;
         }
         .btn-outline:hover {
-            border-color: #58a6ff;
-            color: #58a6ff;
-            background: rgba(47, 129, 247, 0.05);
+            color: #5C86FF;
+            box-shadow: 6px 6px 15px #d1d1d1, -6px -6px 15px #ffffff;
+            transform: translateY(-1px);
         }
 
+        /* ============ DOWNLOAD BUTTON ============ */
+        .Btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background-color: rgb(27, 27, 27);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition-duration: .3s;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.11);
+        }
+
+        .svgIcon {
+            fill: rgb(214, 178, 255);
+        }
+
+        .icon2 {
+            width: 18px;
+            height: 5px;
+            border-bottom: 2px solid rgb(182, 143, 255);
+            border-left: 2px solid rgb(182, 143, 255);
+            border-right: 2px solid rgb(182, 143, 255);
+        }
+
+        .tooltip {
+            position: absolute;
+            right: -105px;
+            opacity: 0;
+            background-color: rgb(12, 12, 12);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition-duration: .2s;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .tooltip::before {
+            position: absolute;
+            content: "";
+            width: 10px;
+            height: 10px;
+            background-color: rgb(12, 12, 12);
+            transform: rotate(45deg);
+            left: -5%;
+            transition-duration: .3s;
+        }
+
+        .Btn:hover .tooltip {
+            opacity: 1;
+            transition-duration: .3s;
+        }
+
+        .Btn:hover {
+            background-color: rgb(150, 94, 255);
+            transition-duration: .3s;
+        }
+
+        .Btn:hover .icon2 {
+            border-bottom: 2px solid rgb(235, 235, 235);
+            border-left: 2px solid rgb(235, 235, 235);
+            border-right: 2px solid rgb(235, 235, 235);
+        }
+
+        .Btn:hover .svgIcon {
+            fill: rgb(255, 255, 255);
+            animation: slide-in-top 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+        @keyframes slide-in-top {
+            0% {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+
+        /* ============ NO RESULT ============ */
         .no-result {
             text-align: center;
             padding: 60px 20px;
-            font-size: 18px;
-            color: #6e7681;
+            font-size: 17px;
+            color: #9ca3af;
             display: none;
             grid-column: 1 / -1;
         }
         .no-result i {
-            font-size: 48px;
+            font-size: 44px;
             display: block;
-            margin-bottom: 16px;
-            color: #30363d;
+            margin-bottom: 14px;
+            color: #d1d3da;
         }
 
+        /* ============ CONTACT SECTION ============ */
         .contact-section {
             margin-top: 50px;
             padding-top: 30px;
-            border-top: 2px solid #30363d;
+            border-top: 2px solid #e8eaf0;
             text-align: center;
             position: relative;
             z-index: 1;
         }
         .contact-section h3 {
-            font-size: 22px;
-            color: #e6edf3;
+            font-size: 20px;
+            color: #2d3142;
             margin-bottom: 8px;
         }
         .contact-section h3 i {
-            color: #58a6ff;
+            color: #5C86FF;
         }
         .contact-section p {
-            font-size: 15px;
-            color: #8b949e;
-            margin-bottom: 18px;
+            font-size: 14px;
+            color: #7c83a0;
+            margin-bottom: 20px;
         }
         .telegram-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            background: linear-gradient(135deg, #58a6ff, #0099dd);
+            background: linear-gradient(135deg, #5C86FF, #4c48ff);
             color: white;
             padding: 14px 40px;
             border-radius: 60px;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             border: none;
             cursor: pointer;
             transition: all 0.25s ease;
             text-decoration: none;
-            box-shadow: 0 4px 20px rgba(0, 136, 204, 0.25);
+            box-shadow: 6px 6px 20px rgba(92, 134, 255, 0.3), -2px -2px 8px rgba(255, 255, 255, 0.5);
             font-family: 'Vazirmatn', sans-serif;
         }
         .telegram-btn:hover {
             transform: scale(1.03) translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0, 136, 204, 0.35);
-            background: linear-gradient(135deg, #58a6ff, #58a6ff);
+            box-shadow: 8px 8px 28px rgba(92, 134, 255, 0.4);
         }
         .telegram-btn i {
-            font-size: 28px;
+            font-size: 24px;
         }
-
         .footer-bottom {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #6e7681;
+            margin-top: 18px;
+            font-size: 12px;
+            color: #9ca3af;
         }
         .footer-bottom i {
-            margin-left: 6px;
-            color: #58a6ff;
+            margin-left: 5px;
+            color: #5C86FF;
         }
 
+        /* ============ MODAL ============ */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 10, 25, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
+            inset: 0;
+            background: rgba(200, 205, 220, 0.7);
+            backdrop-filter: blur(10px);
             align-items: center;
+            justify-content: center;
             padding: 20px;
+            z-index: 1000;
         }
         .modal-overlay.show {
             display: flex;
         }
-
         .modal-box {
-            background: linear-gradient(145deg, #1c2330, #161b22);
-            border: 1px solid #30363d;
+            background: #f0f2f7;
             border-radius: 28px;
             max-width: 860px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             padding: 32px 38px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            box-shadow: 20px 20px 60px #c5c5c5, -10px -10px 30px #ffffff;
             animation: modalFadeIn 0.3s ease;
             position: relative;
         }
@@ -535,10 +853,9 @@
             background: transparent;
         }
         .modal-box::-webkit-scrollbar-thumb {
-            background: #30363d;
+            background: #d1d3da;
             border-radius: 10px;
         }
-
         @keyframes modalFadeIn {
             from {
                 opacity: 0;
@@ -549,123 +866,114 @@
                 transform: scale(1) translateY(0);
             }
         }
-
         .modal-close {
             position: sticky;
             top: 0;
             float: left;
-            background: #21262d;
-            border: 1px solid #30363d;
+            background: #e8e8e8;
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
-            color: #8b949e;
-            transition: all 0.2s ease;
+            color: #7c83a0;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
             margin-bottom: 10px;
+            border: none;
+            box-shadow: 5px 5px 12px #d1d1d1, -5px -5px 12px #ffffff;
         }
         .modal-close:hover {
-            background: #30363d;
-            color: #f85149;
-            border-color: #f85149;
+            color: #ef4444;
             transform: rotate(90deg);
+            box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff;
         }
-
         .modal-title {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
-            color: #e6edf3;
-            margin-bottom: 6px;
+            color: #2d3142;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 14px;
             flex-wrap: wrap;
         }
         .modal-title i {
-            color: #58a6ff;
-            background: rgba(47, 129, 247, 0.1);
+            color: #5C86FF;
+            background: rgba(92, 134, 255, 0.1);
             padding: 10px;
-            border-radius: 16px;
-            font-size: 26px;
+            border-radius: 14px;
+            font-size: 22px;
         }
-
         .modal-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px 28px;
-            font-size: 14px;
-            color: #8b949e;
-            margin: 12px 0 20px 0;
-            padding: 14px 20px;
-            background: #21262d;
+            gap: 10px 24px;
+            font-size: 13px;
+            color: #7c83a0;
+            margin: 12px 0 20px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 16px;
-            border: 1px solid #30363d;
+            box-shadow: inset 4px 4px 12px #d8dae0, inset -4px -4px 12px #ffffff;
         }
         .modal-meta i {
-            width: 22px;
-            color: #58a6ff;
+            color: #5C86FF;
             margin-left: 4px;
+            width: 18px;
         }
-
         .modal-section {
             margin: 20px 0;
         }
         .modal-section h4 {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
-            color: #e6edf3;
-            border-bottom: 2px solid #30363d;
+            color: #2d3142;
+            border-bottom: 2px solid #e4e6ed;
             padding-bottom: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .modal-section h4 i {
-            color: #58a6ff;
-            font-size: 18px;
+            color: #5C86FF;
         }
         .modal-section ul,
         .modal-section ol {
             padding-right: 24px;
-            margin: 8px 0;
+            margin: 6px 0;
         }
         .modal-section li {
             margin-bottom: 5px;
-            color: #c9d1d9;
+            color: #4b5280;
             line-height: 1.7;
         }
         .modal-section p {
-            color: #c9d1d9;
+            color: #4b5280;
         }
         .modal-section .note {
-            background: #21262d;
-            padding: 12px 18px;
-            border-radius: 14px;
-            border-right: 4px solid #d29922;
-            font-size: 14px;
-            color: #c9d1d9;
+            background: rgba(255, 248, 230, 0.8);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border-right: 4px solid #f0b429;
+            font-size: 13px;
+            color: #5c4008;
         }
-
         .modal-download {
             margin-top: 24px;
             padding-top: 20px;
-            border-top: 1px solid #30363d;
+            border-top: 1px solid #e4e6ed;
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 14px;
             flex-wrap: wrap;
         }
-        .modal-download .btn {
-            padding: 12px 36px;
-            font-size: 16px;
-        }
 
+        /* ============ RESPONSIVE ============ */
         @media (max-width: 700px) {
             .container {
                 padding: 18px;
@@ -673,7 +981,6 @@
             .header {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 16px;
             }
             .search-box {
                 max-width: 100%;
@@ -681,172 +988,86 @@
             .cards-grid {
                 grid-template-columns: 1fr;
             }
-            .filter-section {
-                gap: 8px;
-            }
-            .filter-chip {
-                font-size: 12px;
-                padding: 5px 14px;
-            }
             .modal-box {
                 padding: 20px;
             }
             .modal-title {
-                font-size: 22px;
-            }
-            .stats-bar {
-                gap: 12px 20px;
-                font-size: 13px;
-                padding: 10px 16px;
+                font-size: 20px;
             }
             .logo h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
-        }
-        @media (max-width: 480px) {
-            .card-header h3 {
-                font-size: 17px;
-            }
-            .meta-list {
-                font-size: 12px;
-            }
-            .telegram-btn {
-                font-size: 14px;
-                padding: 12px 24px;
-            }
-        }
-
-        @media print {
-            .search-box,
-            .filter-section,
-            .stats-bar,
-            .contact-section,
-            .card-footer .btn:not(.btn-primary) {
-                display: none !important;
-            }
-            .modal-overlay {
-                position: static !important;
-                background: white !important;
-                backdrop-filter: none !important;
-                padding: 0 !important;
-            }
-            .modal-box {
-                max-height: none !important;
-                box-shadow: none !important;
-                border: none !important;
-                padding: 20px !important;
-            }
-            .modal-close {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .container {
-                background: white !important;
-                box-shadow: none !important;
-                border: none !important;
-            }
-            .card,
-            .modal-box {
-                background: white !important;
-                border: 1px solid #ddd !important;
-                box-shadow: none !important;
-            }
-            .card::before {
-                display: none !important;
-            }
-            .modal-section h4 {
-                border-bottom-color: #ddd !important;
-            }
-            .modal-meta,
-            .principle,
-            .purpose,
-            .protocol-preview,
-            .note {
-                background: #f5f5f5 !important;
-                border-color: #ddd !important;
-                color: #333 !important;
-            }
-            .modal-title,
-            .card-header h3,
-            .card-body,
-            .modal-section p,
-            .modal-section li {
-                color: #222 !important;
-            }
-            .badge,
-            .tag {
-                background: #eee !important;
-                color: #555 !important;
-            }
-            .btn-primary {
-                background: #1f6feb !important;
-                color: white !important;
-            }
-            .protocol-preview::after {
-                display: none !important;
+            .header-actions {
+                justify-content: flex-start;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- ============ PAGE LOADER ============ -->
+    <div id="page-loader">
+        <div class="typewriter">
+            <div class="slide"><i></i></div>
+            <div class="paper"></div>
+            <div class="keyboard"></div>
+        </div>
+        <span id="loader-text">در حال بارگذاری پروتکل‌ها...</span>
+    </div>
+
+    <!-- ============ MAIN CONTAINER ============ -->
     <div class="container">
 
         <header class="header">
             <div class="logo">
-                <h1><i class="fas fa-flask"></i> ChemiSafe / دستیار هوشمند آزمایشگاه </h1>
+                <h1><span class="logo-icon"><i class="fas fa-flask"></i></span> ChemiSafe / دستیار هوشمند آزمایشگاه</h1>
                 <span>مرجع تخصصی پروتکل‌های آزمایشگاهی · کاری از انجمن علمی زیست شناسی جانوری دانشگاه تبریز</span>
             </div>
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="جستجوی روش، کاربرد یا پروتکل..." />
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="جستجوی روش، کاربرد یا پروتکل..." />
+                    <i class="fas fa-search"></i>
+                </div>
             </div>
         </header>
 
-        <div class="stats-bar" id="statsBar">
-            <div class="stat-item"><i class=""></i> <strong id="totalCount"></strong></div>
+        <div class="filter-section" id="filterSection">
+            <span class="filter-label"><i class="fas fa-sliders-h"></i> فیلتر:</span>
+            <span class="filter-chip active" data-filter="all"><i class="fas fa-th-list"></i> همه</span>
+            <span class="filter-chip" data-filter="general"><i class="fas fa-flask"></i> عمومی</span>
+            <span class="filter-chip" data-filter="microscopy"><i class="fas fa-microscope"></i> میکروسکوپی</span>
+            <span class="filter-chip" data-filter="electrophoresis"><i class="fas fa-bolt"></i> الکتروفورز</span>
+            <span class="filter-chip" data-filter="separation"><i class="fas fa-filter"></i> جداسازی</span>
+            <span class="filter-chip" data-filter="spectroscopy"><i class="fas fa-chart-line"></i> طیف‌سنجی</span>
+            <span class="filter-chip" data-filter="biophysics"><i class="fas fa-wave-square"></i> بیوفیزیک</span>
+            <span class="filter-chip" data-filter="calorimetry"><i class="fas fa-thermometer-half"></i> کالریمتری</span>
+            <span class="filter-chip" data-filter="proteomics"><i class="fas fa-dna"></i> پروتئین‌شناسی</span>
+            <span class="filter-chip" data-filter="molecular"><i class="fas fa-dna"></i> مولکولی</span>
+            <span class="filter-chip" data-filter="immunology"><i class="fas fa-bolt"></i> ایمونولوژی</span>
+            <span class="filter-chip" data-filter="cell-culture"><i class="fas fa-vial"></i> کشت سلولی</span>
+            <span class="filter-chip" data-filter="microbiology"><i class="fas fa-bacteria"></i> میکروبیولوژی</span>
         </div>
-
-       <div class="filter-section" id="filterSection">
-    <span class="filter-label"><i class="fas fa-sliders-h"></i> فیلتر:</span>
-    <span class="filter-chip active" data-filter="all"><i class="fas fa-th-list"></i> همه</span>
-    <span class="filter-chip" data-filter="general"><i class="fas fa-flask"></i> عمومی</span>
-    <span class="filter-chip" data-filter="microscopy"><i class="fas fa-microscope"></i> میکروسکوپی</span>
-    <span class="filter-chip" data-filter="electrophoresis"><i class="fas fa-bolt"></i> الکتروفورز</span>
-    <span class="filter-chip" data-filter="separation"><i class="fas fa-filter"></i> جداسازی</span>
-    <span class="filter-chip" data-filter="spectroscopy"><i class="fas fa-chart-line"></i> طیف‌سنجی</span>
-    <span class="filter-chip" data-filter="biophysics"><i class="fas fa-wave-square"></i> بیوفیزیک</span>
-    <span class="filter-chip" data-filter="calorimetry"><i class="fas fa-thermometer-half"></i> کالریمتری</span>
-    <span class="filter-chip" data-filter="proteomics"><i class="fas fa-dna"></i> پروتئین‌شناسی</span>
-    <span class="filter-chip" data-filter="molecular"><i class="fas fa-dna"></i> مولکولی</span>
-</div>
 
         <div class="cards-grid" id="cardsGrid"></div>
+        <div class="no-result" id="noResult"><i class="fas fa-search"></i><span>هیچ روشی با عبارت جستجو شده پیدا نشد.</span></div>
 
-        <div class="no-result" id="noResult">
-            <i class="fas fa-search"></i>
-            <span>هیچ روشی با عبارت جستجو شده پیدا نشد.</span>
+        <div class="contact-section"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG4AAAB3CAYAAADignWoAAAACXBIWXMAABcSAAAXEgFnn9JSAAAYl0lEQVR4nO2dd7gV1bnGf0c451Cko4ACEUFFSRBNLFiCKChiuYoS1NhFo8ZLbIkFS7yxl6jxGhuxa1RMLFiIiQqxi1wEryKIgFFBFBWUXvPHO8Ne09eaPfscuPe8z3Oes/fsNbNnz7fW179vVa1du5YGbHjYqL5voAH50EC4DRSNzTdDTqqv2/h/iZ2BQ4HJwCOuJzfOHtKACuE04HhgETAaWO1ycgOrrD+M8/7/CzA1xM7AflknNxCu/nAf0AXYHlhjHL8eGAtsknZyA+HqF58Bq0LHfJpslXZiA+HWP8zx/u+cNqiBcJXHxo7ja7z/O6UNatAqK4uHgUHANOAtYDYwHy2YVkBTRNgVwDdAe+AY79xOaRduIFxlcQRQBezq/a0CvgBqgbZAI2PsMqCJ8T6VNg2ssrIYiLTE/kAzoBppkpsiwlShVef//6lxblhpCaBhxVUWL3p/aVhmvDYX0mdpJzWsuPULRxuvX08b2LDi3LEHcCDwLfAdQa+HDWqQbDPP8w3wwcaxCWkXaSCcO/oA51X4O5YDHxjvqwhNkAbCueOPSLWvBb5HD7SqzGsuRo7mPt7764Gl3nX3B/5GyAndQDh3rCGDjeVAa6C38f5G7//jwBBiJsb/NcJVIedsO6A78rR3Q+p3Lfq9PstZAcwC3kExsU/q+mYN3EBJUbwb+BpoiYgGsu9M7XODJ1wz5IwdCOyFZu0mBA1ZW3wK/B14ErHCLx3PbwJcCmyNQjaTUKxtJSUZ1QgpJ/77lcizcqJ3jWXAr7zX1xjX7oi8LutQZSYL1XEEvDWwIMd57YF+yDW0u/e+aCwD3gT+ADyLVmcW9gH+Ueb3DkXs8QcECdWLoLJSbytuc2AEYlW3W4yvAQ4CjkTCulnlbg3Q6tnL+/scuBa4kxC7CuF94K9IiZgAfIzY70pjTCPEsmvRin4I2MH77C5ENIAXQtf+Nvxl9UW4ZYiNnIB+8CsJ47oAwxD76Fw3txbB5sDNwFnefTydMO4L4DCH624F9PRejwNO8V7fititjznAvPDJdU24psAhyBO+PTAGhe7D6AycBFyE3T1+jljJLCSfpnrHNwE2A5p7//ckI1ySgi2Ap5A5cDaytfKiBbrfxt699veOnwGcHhr7AcEIOVD3hBuGVhnA1cDzoc9rELF+TbaC8SoK8U9A/sC0ZJsDkaY5xPs/FE2Mjg737uN0pAwdQkjuOOAV9OxfQ/Ia5O66JWbszLgL1JVy0hbYxfvrAfwe+J/QmJ8Dv0PqexI+Ae5FSsCrlt89kJLMmEEpJaA5mkT/SZA12WIpcDjwnON5o73zRgM/846dhlZyHPoB/wwfrAvCDQQuQz/0PsQaPqKkUXYEHgAGpFzjNeBKYjwIGagG5qJV5mMumjxLvPdVwKlotjfCHT9HAdMsNAHuQTG6i4HLvePXAecmnDMHydgIKs0qeyI3Tmsk3N8KfX40mmktEs4fh2yjyIyzxGUEiQaKLE9AKjbInroNse3bkF3lgodQ7OyxjHGbIw1zDzQRAZ5ALDcJv0n6oJJhnQ5AV7TihhIl2p1opcURbQpwMBLaeYkGMh3isB1S3U3M9safn+N7HkWmQxo+Bo5FRNsZ+JB0ok1BkyIWlSJcT+A4xHomI5Xfhz/jT445bxUwkpLGmQe3Ahd4ry9IGXcoJZ+giWuQMhPR5DLwMnbKzsVoEm+TMe5naR8WTbjOSOjPRBri/sgP56M3IuJPYs59E9gWybK8GIm0vivRAxqLNNkknEk8a3wWKVKusbax6PfHYSvEPf7L4jq/QAlGiSiKcH28/zsjLWtHJHxHIMMU5PmYDLSJOf8ioC/S+vLiIEoCH/SARiPZ80NkO8bhL8S7zd5Bdp8LtidemRgBTLe83s1IjKSiKML9BDgHraiuKDJs4iDiPQ6LvM+uKPP7eyZc/3AkU95HSsq7MWOaeefGudFeQw/dBlMQi51uHOuOVu/Nlte4E3GBTBRFuFFIdg1D7M40TPcl/qHOQAR/pszvrgZeSvl8N2Ah0uZ28O41jL4ky5xbyLYZb0Sr7Vnj2LFIARkce0YUtyMWaYUiCDcUqbXNESswHbH9ke0VxptodabycUuMIyN5FMW2XkGy72R0zyaeRw85CfuiaHcYbyFZeLZxrAsSF/dhb26dg4xwaxRhx22GApXnoixdH92IXwkvoweRmjdoiXvRirLFBUgOD0AT7RRkgN9Muha5FJknLxvHLiLK4k9FWmlLh3vyQzlOKIJwq9CM/dg41oxS/ZeJN4G9C/hOkPZ4XI7z9kEK087ATQ7njUNssy9aYWZEYzNE/MMdrjcJFTZOcThnHcpllW2REdk0dPx5pKSYeBf96CKwD7LX8qID8nse63jeCBRdMIk2HCkkLkS7EWneuYgG5a24HYCj0AMYaxy/gGAqNUg+9KMYdCIaVciDWyiFf/KgHdICh2QNNPA5WmXlRsrLIlwntKquBSZ6x/Yg3oDuS9REyINGKMO3uoxrfIbk1aQyrnE2cAmquLHFDd45S7IG2iAP4TZDnu5+iEiTjc/C/j9QusH7McfzYAwKaObFQmSCRCLKluiLPPxZ7ioTryN5PDlroAtsCednJdWih/ctStaZa4y5kWjd8v3kaAWRgD+Q7DS2xYHkJ9p5KPhri6/RCgvH2bZDEz8cj3SCLeFqkdpai+yTbwkSrRdRi38u+bS+OJyMAp7lwCX4aqIaucUOcjjnOmQqLDSO9UDEH+69vxC4Ksf9APaEa4Tk2YnIug8L17tjzkn1bjtgVyx8dxZ4NMc57ZAD4ceW4z8AfknQFOqCtNfLCAZqr0QGfJrXJxG2hFuMwv87EbTXQC6dcKH5g+Sb3WG0ogANzMMix/FNkK/SVp7dhojmRxR+hFbX6SQ/57+iyeHUnAbs7LhDkadjVyRgvw59Hl4NS5EHoQhMIDlM4orULgYxeAM7os1Bk/d0SkQbjmy0EaQvjla456wAdoT7BrmvBiGNylTr/4NoGONqtELLxWNk9PpwxAjsifcXSqGqNDyAIhNhu9Ilprgvyjhzgg3hxiO2MY9Q/jry15mYh12gMAu/JeoILhe+DXghyoFJwnFkG9XLkbw/lnjn83uO9zYKRVWsYUO44Wi23hU6PpBoJDu3lmTgCJQgVAk0Qtrev1CoKezh6YAc12l4C6Xz3ZMy5owc9zY2e0gJWYQ7HnkJ/ht4O/TZL0PvVxKf0OmCnYA/l3kNG7RA6v14tDpOQ0S7Ie0k9Bx2pZR9XUO8F2cqcIDjPXUlPlYYiyzCfYO0ug8JGtcdkXwzcSvuCTYmNqY4DdIFP0RG8iyUI5mE0yjZkjWoanQ4yc/wOdKTleJwEpaO7zTCtUAa0QBkPJoeh7i2fJfHHHPB33GLYxWNcITDxEGUqoqGINNiGFLn02oIrsY9wn8f0VzQCNJU1RaIdd2DVp5ZQB5W998gaia44DHEglzxHiX7rDMydovEahRCGo/MklFIBn/u8F1DvPGpbQxDGI84QSLSCFeNCDaDoDG9NdGHfIfDTYVxPu4a5OfIpnwUrZTeqKK0C0ptfxux7W2QQtKc4Cxehn5fVsr53iilbhu0cnog+eZSa7AScS0XJ3MvVF9xdtKANMJ9giojh6HcEV9+7RIzdpzDTZnYH3tN9Ask9Jcis6Q3Usnno0jFNKQprkHRiA5oxUxH3GBbJJtXeO93QcTbIuH7TkBE64lS9Zp719sN9xKrKUibHelwzlkoYyA2tT2NcE0QG3qaYFXlwaFxb5Ov8L0Hbl6DjdAP+Q79qE1Dn7dHs3oOSr5pgh7wtt45c5HTdxKa0fNJJtzvkVnQEan/zRHBe6HVngcXoXilS0D5UfR7Iu7DNMJ1QGyhhpJs24hozsh9DjfSDWlvID7ugk3RCl1ClGg+tvf+fNQCW3qv+3j/h6DVuZJ4OTIbER7kn/UVpkfQBN2SUibbcu+v1hvXCnGCAWiVXR+69hA0YVz6ovwNTa6vzINphPsCPaQ3KbGGzVGeiYl3LW9gMMo7HIdYzmaW55nok3B8Lqqpno3uubF3/Y7eX9jfmeaD9DXmXyNHsY9jKanqaxDhv0MrsQXxGvHDlDq+gnSG43Gb7M2QSy3g7IgjXHu02poh/mqG2ncIjV2Lat2ysDmlZNG9LMbbYALS8sYiwq1MGNcO+TwHoVBTmmvpDiQTu6CUDJBMvRBN5FXID7sEEWwNUnA2QoTrjAKlA1E6R5ymfT/SVF0SlX6MdIF1dmFcYWMzJESr0Qx+iFJA8BqCNVtvkp251RqxjaJU9ee8+3s35/nbI032iJjP2qIg8Z2UqolOINsN5ooqtPpaO563H151bZwBvgTlG3ZFqrU5k8MaZdgNFod7KIZos1Eq4AHkJxpIgTkSrQwzEfVGRLRmlIg2n+KJBuJUaRW4SRiN52KLY5U1yE5rRUlm+OgRGjuXbDyEHnY5mVkvIe9FIRlSHqYi+3Ek8vr4TmPTx7gKsb/VyCWXx6W3Bj3nzohdz0cLYyKKpFzicK2WSN4NiCNcU5SYcwfBZpctiVaPRhqnxOBxZFeNJZoka4MncMtddMUVSF76SsTxxmcdkWFfNHyb81K0SPpjP7H3Aa6NI1wtEqphe6UVUcLZrDjQ7O6N7JLM7UcMjKOyRPPhd2WopVTD9hV6sKvRb19L0CxaiVbkauIVo2rEdn0zYVOkFc8imNO5H9JOq1H9xWfIfl5NvNlQA9TEEW4RWmnh/lV+02cTLob3QsQqHiDYwjYJEymuzsAWnShNzutRHkml8QvjO28lve3UOsQpJ7XI6xDu+BNebWsJVufY4hiU8ZSFF3Ev5S0Xpi2W1PqpSHQl2MvMOlUjTLg2yCUzl2jmUZhw3+OeOeXjt6THvqC4nEwX1Bqvk7wzJpohDfUS8mWFm83WVmMveiJfVoMMzplEbYxwqe1Syutn9TCSoy8S76Wvj20IZxuvx6PJGZ6wS5CmGN56ZWvsRICPMQQ9ONNw4GBhws1DgnIw0YbRebruZGE8ctw+i+qlfZxOsCw3DtujnJEa5L2fSDYH6IBW0qaITdUiBWMJemi1aOavQI7dCYhw7dHv991cy5Gx3hGxtxZE+7ik4XaUDm/CqTo3TLiWqHnnFkTbyYZXVyOKIeY0RLznkDIyinSloClyxYV/+NfIHrvJONYGuYsOQmr0NmSztDUoQLuv1d2X7mmp5dikbkJvOHxf5Eccg2bwxmiWLTA+C5dJtUTss4gcyuXowfYjO2rwFkHnr492yPtxCqXCwWNwT6jdiFLtn02PLrAj2iYo1WGPmM9WYNdwdR3ChLsfzZ4tERsw+46ECVSD7JOvKA5ZRLuGeKKZ2Jb4WoOlyOP/McrW6h4zxkc1xUxIHwcjz0w4suJjFPH5mYkIa5WLEdFqiSojcT8ktrNbhdCKlFC+BZ5GdtJYgt6ROMxETUXLRSOUMPQUyUQDN7cXECVcNeLxzSi1nfWxiKhxWHRyThr2prwK2j2RcgKlUqckmK0ruqIoyOu4JfwciuR31q4gp5Aj0Sr8ILZDAbtXiWpJ36JVZ3ZurUQH8iSU46QGBVanItaeluxzG0H7akdKUZHuZIuGTZGMPcrinsYQzRC3Qphwc1Cl5LFIJpjEW4mCiWa2VF0SrojdNdoQ30vMx51EeyK/gIo4VpMdxjoHRRvSvsPHe0STiq0RZpXzEFtoQ7xnI1z+6lILXS5mUfzWKCbuIr4l0xJEjEtIDuv0R4S4HjuiTUc5q7ldekmZzK8lXDRsa/SjbhtyF9EmIw5jKLWPd0EbVOvwEhkJrAZeR+y3HK9T4kP/E5Jlk5Gh68ekXguN2wSturxdFbZEP2IAMsLbIY22Cv2wb5CAH4/k7qWot3+vuIvlxDTSO7Um4TyUAtHa4Zz7KcgHm0S4pWgWnoByM67zjs9ALiLzvK1xJ9wgJA9swve7UWp5/ydUGNKDoEO4HAzELbK9P1I+XMXEr1CAuhCksbkVaKabHpMliEhm7uKByI1jgz3Rj7Ythg/DdzwX0cANJMdtI9zdUOaXS+snkCZ7NGW2xwgjrVpnLkoJC9cFhFOij8TOrfRHlNKdl2gmipCrN2Ln0qpFuSEf4060K5GJVSjRIJ1wWxHvbQ/LuabE91j20RZpqk79GCuMWdh5YY5GHOZi3LOPd8GtVsAJaYT7KUq7HkpQxX2HqF/tyIRrtEFEiysUqU9kydahqDflA6T7NMP4CGmng7BLXcyNNMLNREu8B0FWuJhoy8EkTektiu2cUARuJ2G/GuTAfgGJg70crvkdqlbtSU5PCAo92fZ/TiXcVKQqL6HUydxHWBlpQjQb627WP6KBIgRxOB9lXA90uNZqZJhvhSIOeUupByAnuHVxZ5aM2xUFVsNh+glEexibdW6DKanw6xNGEpXbNciIdukYsQZpmFujjZxct+U0cRwqowaZO1ZI2xSpFVIseiE28BBKgfaDhudSsu98+FtCziG7wXVd43uiFTWbIGXLhTM8gRrOhbPgXNEGObT9DS2+QGEyq1WbtuIWIu2rOVIutiAY6R1FNPJ7Ikr6XN+IBtGWhZ2QZ8iWaJ8hOTSE8ojWFLHrWQR3IXkQB1Zr06BmOjLEPyPoLVhAtK/JqUT391wfsICgQtUMaX02E2wVsuN6kH+PhCrkfLgZJRFfS7C77CIcOzLZEG4SctWsQgLcjHpfQ9AZ3Ry3YGNd4SaCvSNfwW7P1eeRAX0p7k7hzVF6+VUo7e+fSGuMez5H4pi6YOuBmIY0n5Vo5jyOCPkNimFZ71BRD1hLUOhfixzbaViAighdEnjaIxm/I/Jn9sfu+V5OjpVsS7iliL0sRykET1HyF56JNKOsPU3rC3chNg/SkpPMAR8PIa9KlqbYFj2LHyHPUX/Sm9zE4TxKla9OsCXc18i7fQyKJ5lKyTL0MMrt41UpmL3BRmeMPY3kVdYacZ3eyMm+N1EzyRafoOeZOyEpzx6phyHjPLwj72zUF2V9wpco2Wc5uu+krVA+Qg5kcwOHbRGhuqMV1ZvkLUFt8R2a4FdRZvqfq5d9d2TE3oLknlkYMojyNmCoBJ6hpFRcnDLGbJR9NsoFCbdELAeTkVb7JAXlodpolSZmIo95V6IC/kOkZa5P8LdS2ZNgDNHHI5SIdh76fTdQPtFWIG18pHetPkjWFpY87LriVqI+lZ0Qz/+A4JI/H6nAfQq4t3KxgtIGFnG9wu5BDoNeyKm8XRnf9TWSWy+j6qNJRP27hcKVcKvQw5iPPAjXEU1nG0ywKUt94X1K0ftwHuU/ENEOJ1thCWMZEhMvo5DVRBR0LjJlPROuhFuAZhSIiGOQt8TUxOYiosZt11KX8MucGxOMB36IIgCnkbzbvYlFaAVNQaVfEynPqVwI8qYAbIzaSjyK3DjveH8+nkCN0uK2a64r+NWdWxHMxNoWyZ00on2KYokvoI7oSRvj1hvyEm4tSpebgey6q1FTl1nGmJuQ/MjK068U/I0tzGxrP8k3qSroWTQZHybHJg51CVet0sdiRLAvEbv8APULCTttT8a+xqxo+BWefqHKTO9e4oh2E1qJB6J0hfWaaFD+jo0bIRfRV0ijDCsqoFleRMmSK/x6ap9lnog8/Kaq/zQyE84ifXPb9Q7lEm4NYknzkF3XnfjuQYcgWVGX8KMBi1E/rvEElajTkaE9JXgaXRCL70Zl6t4LQbmEA+VcPImcrS+iBxTnPDsct81ky4XP7hahNIoqVK68HJUK+3Xm1chv+BKS0Z8A/4tY66cobncXbrsfVxxFEA7Eln6H2M1kgiXIJs6igrmGIfiBSr9dk7/7Rh9K3feOQxzjJuTd34Jg/mQnVFUzHKU4vEJ2al8XinuuiSiq0sYPub9GKWH2CiRf/kyw4vJKZBw/SH7vug3CDWZWIdb4ISLOw8T3rEzDHiix5w1kKryKWHIbFDIahuJrefaqc0Ke6IANzkDG+l5IITgYzcIFxpiOyFu/e2HfGsS5xG+50hjZnHG+y3JR6U5/61CpJf0c+hG3IU/DM0jOmFnBX6AZfEWF7iGpXPgeKkO0B6kjokHlCDcTaXMTkYdiIaqFiyPSRcgl9XLB99At5lgVbm2bbHEVCjLXGSouRJHw/w3S2j5GZsFhBMP8b6OI8gjKz1f00ZdoKsFa5BguCjOQqXNhgde0Ql0QDhRgfQKtwu9RJnRcc85bEIu7jmBWVh5sTPwqOIDsPmFZmI7MoJ7Uj3OhYspJHLogoryYNdBDO+TtOJN8exSAbMq9Ej4bgKIEh2C3V85UJKtfR3ZrvaIuCZcXTVHe4VHIgHbF1mTvjdALRRHao2y1ahSIXYbcedNZz1xiGwLhTPRFhvJQ7KPstxHvQ92gsaERzsQ2yKuxP1qJHVLGtmM9jKmVg7rsUVI0pnl/D6JSqW5IFu6IVuMPUNJqB+QAuLc+brJS+Dc8RUIihqFm0gAAAABJRU5ErkJggg==" 
+             alt="تصویر">
+        <p class="caption"></p>
+            <h3><i class="fas fa-paper-plane"></i> ارتباط با ما</h3>
+            <p>جهت ارتباط با ما و به اشتراک‌گذاری نظرات ارزشمند خود، به کانال تلگرام ما بپیوندید.</p>
+            <a href="https://t.me/animalbiology_tabrizu" target="_blank" class="telegram-btn" id="telegramLink">
+                <i class="fab fa-telegram-plane"></i>
+                عضویت در کانال تلگرام
+            </a>
+            <div class="footer-bottom">
+                animal-biology-association <i class="fas fa-envelope"></i> &nbsp;
+                abans.tabrizu@gmail.com <i class="fab fa-instagram"></i>
+            </div>
         </div>
-
-        <div class="contact-section">
-    <img src="data:image/png;base64,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"تصویر">
-    <h3><i class="fas fa-paper-plane"></i> ارتباط با ما</h3>
-    <p>جهت ارتباط با ما و به اشتراک‌گذاری نظرات ارزشمند خود، به کانال تلگرام ما بپیوندید.</p>
-    <a href="https://t.me/animalbiology_tabrizu" target="_blank" class="telegram-btn" id="telegramLink">
-        <i class="fab fa-telegram-plane"></i>
-        عضویت در کانال تلگرام
-    </a>
-    <div class="footer-bottom">
-        animal-biology-association .<i class="fas fa-envelope"></i>
-        abans.tabrizu@gamil.com <i class="fab fa-instagram"></i>
-    </div>
-</div>
-
     </div>
 
+    <!-- ============ MODAL ============ -->
     <div class="modal-overlay" id="protocolModal">
         <div class="modal-box" id="modalBox">
             <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
@@ -855,10 +1076,9 @@
     </div>
 
     <script>
-      const dataCards = [
-    // ========== تکنیک‌های عمومی (General) ==========
-    {
-        id: 'homogenization',
+        // ============ DATA ============ (همه پروتکل‌ها با نکات طلایی کامل)
+        const dataCards = [{
+           id: 'homogenization',
         title: 'هموژنایزاسیون',
         icon: 'fa-blender-phone',
         badge: 'تکنیک عمومی',
@@ -3624,7 +3844,7 @@
         }
     }
 ];
-
+        // ============ RENDER CARDS ============
         const grid = document.getElementById('cardsGrid');
 
         function renderCards(cards) {
@@ -3635,43 +3855,76 @@
                 card.className = 'card';
                 card.dataset.category = item.category;
                 card.dataset.search = item.search + ' ' + item.title + ' ' + item.purpose;
+
                 card.innerHTML = `
-                <div class="card-header">
-                    <h3><i class="fas ${item.icon}"></i> ${item.title} <span class="badge">${item.badge}</span></h3>
-                </div>
-                <div class="card-body">
-                    <div class="principle"><strong>اصل:</strong> ${item.principle}</div>
-                    <div class="purpose"><strong><i class="fas fa-bullseye"></i> کاربرد اصلی:</strong> ${item.purpose}</div>
-                    <div class="meta-list">
-                        <span><i class="fas fa-clock"></i> زمان: ${item.time}</span>
-                        <span><i class="fas fa-signal"></i> ${item.sensitivity}</span>
+                    <div class="card-header">
+                        <h3><i class="fas ${item.icon}"></i> ${item.title} <span class="badge">${item.badge}</span></h3>
                     </div>
-                    <div class="tags">${tagsHtml}</div>
-                    <div class="protocol-preview"><strong>مراحل کلیدی:</strong> ${item.preview}</div>
-                </div>
-                <div class="card-footer">
-                    <span class="btn btn-outline"><i class="fas fa-file-alt"></i> مشاهده پروتکل</span>
-                    <span class="btn btn-primary btn-sm download-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</span>
-                </div>
-            `;
+                    <div class="card-body">
+                        <div class="principle"><strong>اصل:</strong> ${item.principle}</div>
+                        <div class="purpose"><strong><i class="fas fa-bullseye"></i> کاربرد اصلی:</strong> ${item.purpose}</div>
+                        <div class="meta-list">
+                            <span><i class="fas fa-clock"></i> زمان: ${item.time}</span>
+                            <span><i class="fas fa-signal"></i> ${item.sensitivity}</span>
+                        </div>
+                        <div class="tags">${tagsHtml}</div>
+                        <div class="protocol-preview"><strong>مراحل کلیدی:</strong> ${item.preview}</div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="btn btn-outline"><i class="fas fa-file-alt"></i> مشاهده پروتکل</span>
+                        <button class="Btn download-btn" data-id="${item.id}">
+                            <svg class="svgIcon" viewBox="0 0 384 512" height="20" width="20">
+                                <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+                            </svg>
+                            <span class="icon2"></span>
+                            <span class="tooltip">دانلود PDF</span>
+                        </button>
+                    </div>
+                `;
+
                 card.addEventListener('click', function(e) {
-                    if (e.target.closest('.download-pdf-btn')) {
-                        e.stopPropagation();
-                        generatePDF(item.id);
-                        return;
-                    }
+                    if (e.target.closest('.Btn')) return;
                     openModal(item.id);
                 });
+
                 grid.appendChild(card);
             });
+
+            // رویداد دکمه دانلود
+            document.querySelectorAll('.Btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const id = this.dataset.id;
+                    generatePDF(id);
+                });
+            });
+
             document.getElementById('noResult').style.display = 'none';
-const totalCountEl = document.getElementById('totalCount');
-if (totalCountEl) {
-    totalCountEl.textContent = cards.length;
-}        }
+            updateCount();
+        }
 
-        renderCards(dataCards);
+        function updateCount() {
+            const totalCountEl = document.getElementById('totalCount');
+            if (totalCountEl) {
+                const visibleCards = document.querySelectorAll('.card:not([style*="display: none"])');
+                totalCountEl.textContent = visibleCards.length;
+            }
+        }
 
+        // ============ PAGE LOADER - 3 SECONDS ============
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loader = document.getElementById('page-loader');
+                if (loader) {
+                    loader.classList.add('hidden');
+                    setTimeout(function() {
+                        loader.style.display = 'none';
+                    }, 500);
+                }
+            }, 3000);
+        });
+
+        // ============ SEARCH & FILTER ============
         const searchInput = document.getElementById('searchInput');
         const filterChips = document.querySelectorAll('.filter-chip');
         const noResult = document.getElementById('noResult');
@@ -3696,6 +3949,7 @@ if (totalCountEl) {
                 }
             });
             noResult.style.display = anyVisible ? 'none' : 'block';
+            updateCount();
         }
 
         searchInput.addEventListener('input', filterCards);
@@ -3709,6 +3963,7 @@ if (totalCountEl) {
             });
         });
 
+        // ============ MODAL ============
         const modalOverlay = document.getElementById('protocolModal');
         const modalContent = document.getElementById('modalContent');
         const modalClose = document.getElementById('modalClose');
@@ -3737,7 +3992,7 @@ if (totalCountEl) {
                 </div>
 
                 <div class="modal-section">
-                    <h4><i class="fas fa-flask"></i> مواد و تجهیزات مورد نیاز</h4>
+                    <h4><i class="fas fa-flask"></i> مواد و تجهیزات</h4>
                     <ul>${p.materials.map(m => `<li>${m}</li>`).join('')}</ul>
                 </div>
 
@@ -3785,15 +4040,12 @@ if (totalCountEl) {
             if (e.key === 'Escape') closeModal();
         });
 
-        // ============================================================
-        //  GENERATE PDF
-        // ============================================================
+        // ============ GENERATE PDF ============
         function generatePDF(id) {
             const item = dataCards.find(d => d.id === id);
             if (!item) return;
             const p = item.fullProtocol;
 
-            // ساخت محتوای PDF با فونت‌های پشتیبانی‌کننده
             const pdfContent = document.createElement('div');
             pdfContent.id = 'pdfContent_' + Date.now();
             pdfContent.style.cssText = `
@@ -3809,7 +4061,6 @@ if (totalCountEl) {
                 unicode-bidi: embed;
             `;
 
-            // تبدیل لیست‌ها به HTML با style مناسب
             const materialsHtml = p.materials.map(m =>
                 `<li style="margin-bottom: 4px; padding-right: 8px;">${m}</li>`
             ).join('');
@@ -3892,31 +4143,14 @@ if (totalCountEl) {
             });
         }
 
-        // دکمه‌های PDF روی کارت‌ها
-        document.addEventListener('click', function(e) {
-            const pdfBtn = e.target.closest('.download-pdf-btn');
-            if (pdfBtn) {
-                const card = pdfBtn.closest('.card');
-                if (card) {
-                    const titleEl = card.querySelector('.card-header h3');
-                    if (titleEl) {
-                        const title = titleEl.textContent.trim();
-                        const item = dataCards.find(d => title.includes(d.title));
-                        if (item) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            generatePDF(item.id);
-                        }
-                    }
-                }
-            }
+        // ============ TELEGRAM LINK ============
+        document.getElementById('telegramLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.open('https://t.me/animalbiology_tabrizu', '_blank');
         });
 
-       document.getElementById('telegramLink').addEventListener('click', function(e) {
-    e.preventDefault();
-    // لینک واقعی کانال خود را اینجا بگذارید
-    window.open('https://t.me/animalbiology_tabrizu', '_blank');
-});
+        // ============ RENDER ============
+        renderCards(dataCards);
     </script>
 
 </body>
